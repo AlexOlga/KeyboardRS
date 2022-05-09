@@ -33,7 +33,6 @@ document.addEventListener('keydown', function(event) {
 
 
 function getKeyChar(event){
-   // event.preventDefault(); //отменить действие по умолчанию
     let activeKey=document.querySelector(`[data-id=${event.code}]`);
     activeKey.classList.remove('keyboard__key--dark');
     switch(event.code){
@@ -93,3 +92,20 @@ document.addEventListener('keydown', function(event) {
 });
 
 
+function setLocalStorage() {
+    localStorage.setItem('lang', properties.lang);
+  }
+  window.addEventListener('beforeunload', setLocalStorage);
+  function getLocalStorage() {
+    if(localStorage.getItem('lang')) {
+        properties.lang = localStorage.getItem('lang');
+     if (properties.lang=='en'){
+         console.log(properties.lang)
+        createKeys(enKeyLayout)
+     } else if (properties.lang=='ru'){
+        console.log(properties.lang)
+        createKeys(ruKeyLayout)
+     }
+    }
+  };
+  window.addEventListener('load', getLocalStorage);
