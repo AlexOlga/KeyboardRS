@@ -35,19 +35,32 @@ document.addEventListener('keydown', function(event) {
 function getKeyChar(event){
     let activeKey=document.querySelector(`[data-id=${event.code}]`);
     activeKey.classList.remove('keyboard__key--dark');
+
+    if (event.code == 'ControlLeft' && 'ShiftLeft') {
+        if  (properties.lang==='en'){properties.lang='ru' 
+        createKeys(ruKeyLayout)    }
+        else {properties.lang='en' 
+        createKeys(enKeyLayout)
+    }   
+    return; 
+  } ;
+
     switch(event.code){
         case 'CapsLock':
             event.preventDefault();
             properties.capsLock= ! properties.capsLock;
             activeKey.classList.toggle("keyboard__key--active");
-            for (let i=0; i< keys.length;i++) {
+            let keys=document.querySelectorAll('.keyboard__key');
+            for (let i=0; i< keys.length;i++) {                              
                 if (keys[i].innerText.length === 1) {
                     if (properties.capsLock) {
                         keys[i].textContent=keys[i].textContent.toUpperCase();
+                        
                     } else 
-                    {keys[i].textContent=keys[i].textContent.toLowerCase();};
+                    { 
+                        keys[i].textContent=keys[i].textContent.toLowerCase();};
                 };               
-            }
+            };
         break;    
         case 'Backspace':
         event.preventDefault();
@@ -63,7 +76,6 @@ function getKeyChar(event){
         case 'AltLeft':
         case 'AltRight':
         case 'ControlRight':
-
         event.preventDefault();            
         break;
         case 'ArrowUp':
@@ -77,33 +89,19 @@ function getKeyChar(event){
             break;          
 }
 };   
-
 document.addEventListener('keyup',getKeyChar);   
-
-document.addEventListener('keydown', function(event) {
-    if (event.code == 'ControlLeft' && 'ShiftLeft') {
-        if  (properties.lang==='en'){properties.lang='ru' 
-        createKeys(ruKeyLayout)
-    }
-        else {properties.lang='en' 
-        createKeys(enKeyLayout)
-    }    
-  } 
-});
-
 
 function setLocalStorage() {
     localStorage.setItem('lang', properties.lang);
   }
-  window.addEventListener('beforeunload', setLocalStorage);
+
+window.addEventListener('beforeunload', setLocalStorage);
   function getLocalStorage() {
     if(localStorage.getItem('lang')) {
         properties.lang = localStorage.getItem('lang');
-     if (properties.lang=='en'){
-         console.log(properties.lang)
+     if (properties.lang=='en'){        
         createKeys(enKeyLayout)
-     } else if (properties.lang=='ru'){
-        console.log(properties.lang)
+     } else if (properties.lang=='ru'){       
         createKeys(ruKeyLayout)
      }
     }

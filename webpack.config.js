@@ -10,7 +10,7 @@ module.exports = (env, options) => {
     const isProduction = options.mode == 'production';
     const config={
         mode: isProduction ? 'production' : 'development',
-        watch: !isProduction,
+        watch: true,
         devtool:'source-map' ,
         entry: ['./src/index.js', './src/styles.css'],
         output: {
