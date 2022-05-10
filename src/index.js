@@ -2,49 +2,50 @@ import './normalize.css'
 import './styles.css'
 import {getLayout} from './layout'
 getLayout();
-import {createKeys, getChar,properties} from './keyboard';
+import {createKeys,getChar,properties,pressed,enKeyLayout, ruKeyLayout,pressedSift} from './keyboard';
 
 const inputText=document.querySelector('.textarea');
 const  keysContainer=document.querySelector('.keyboard__keys');
-const  enKeyLayout = [
-    "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0","-","=", "Backspace",
-    "Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p","[","]","\\",
-     "Caps", "a", "s", "d", "f", "g", "h", "j", "k", "l",";","'", "Enter",
-     "Shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "?", "Shift","▲",
-     "Ctrl","Alt", "space","Alt","Ctr","◄","▼","►"
- ];
- const  ruKeyLayout = [
-    "ё", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0","-","=", "Backspace",
-    "Tab", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з","х","ъ","\\",
-     "Caps", "ф", "ы", "в", "а", "п", "р", "о", "л", "д","ж","э", "Enter",
-     "Shift", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", ".", "Shift","▲",
-     "Ctrl","Alt", "space","Alt","Ctr","◄","▼","►"
- ];
+
 
 
 window.addEventListener("DOMContentLoaded", createKeys(enKeyLayout));
 let keys=document.querySelectorAll('.keyboard__key');
-keysContainer.addEventListener("click",getChar);
+keysContainer.addEventListener("mousedown",getChar);
+keysContainer.addEventListener("mouseup",function (event){
+        let btn=event.target;
+        pressed.delete(btn.dataset.id); 
+    
+     if ((btn.dataset.id=='ShiftRight')|| (btn.dataset.id=='ShiftLeft')){
+        upSift ();
+}});
 
 document.addEventListener('keydown', function(event) {
     const activeKey=document.querySelector(`[data-id=${event.code}]`);
-    activeKey.classList.add("keyboard__key--dark");    
+    activeKey.classList.add("keyboard__key--dark"); 
+    pressed.add(event.code);
+    if (pressed.has('ControlLeft')&& pressed.has('ShiftLeft'))    
+   {
+        if  (properties.lang==='en'){properties.lang='ru' 
+        createKeys(ruKeyLayout) ;   }
+        else {properties.lang='en' ;
+        createKeys(enKeyLayout);
+        }   
+     } else{
+    if( (event.code == 'ShiftRight')||(event.code == 'ShiftLeft')){
+       
+            pressedSift ()  
+        } else{
+          
+            getKeyChar(event)
+        }
+    };       
 });
 
 
 function getKeyChar(event){
-    let activeKey=document.querySelector(`[data-id=${event.code}]`);
-    activeKey.classList.remove('keyboard__key--dark');
-
-    if (event.code == 'ControlLeft' && 'ShiftLeft') {
-        if  (properties.lang==='en'){properties.lang='ru' 
-        createKeys(ruKeyLayout)    }
-        else {properties.lang='en' 
-        createKeys(enKeyLayout)
-    }   
-    return; 
-  } ;
-
+   let activeKey=document.querySelector(`[data-id=${event.code}]`);
+   // activeKey.classList.remove('keyboard__key--dark');  
     switch(event.code){
         case 'CapsLock':
             event.preventDefault();
@@ -62,10 +63,6 @@ function getKeyChar(event){
                 };               
             };
         break;    
-        case 'Backspace':
-        event.preventDefault();
-        inputText.value = inputText.value.slice(0, (inputText.textContent.length - 1));
-        break;
         case 'Tab':
         event.preventDefault();
         inputText.value += ' ';
@@ -83,13 +80,24 @@ function getKeyChar(event){
         case 'ArrowDown':
         case 'ArrowRight':
         case 'Enter':
+        case 'Space':
+        case 'Backspace':
         break;
         default:
+            event.preventDefault();
             inputText.value +=activeKey.textContent;
             break;          
 }
 };   
-document.addEventListener('keyup',getKeyChar);   
+
+
+document.addEventListener('keyup',function (event){
+    let activeKey=document.querySelector(`[data-id=${event.code}]`);
+   activeKey.classList.remove('keyboard__key--dark'); 
+   pressed.delete(event.code); 
+     if( (event.code == 'ShiftRight')||(event.code == 'ShiftLeft')){
+        upSift ();
+}});
 
 function setLocalStorage() {
     localStorage.setItem('lang', properties.lang);
@@ -107,3 +115,14 @@ window.addEventListener('beforeunload', setLocalStorage);
     }
   };
   window.addEventListener('load', getLocalStorage);
+
+ 
+
+  function upSift (){
+    if (properties.lang=='en'){        
+        createKeys(enKeyLayout)
+     } else if (properties.lang=='ru'){       
+        createKeys(ruKeyLayout)
+     }
+    };
+  
