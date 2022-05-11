@@ -22,31 +22,33 @@ keysContainer.addEventListener("mouseup",function (event){
 
 document.addEventListener('keydown', function(event) {
     const activeKey=document.querySelector(`[data-id=${event.code}]`);
-    activeKey.classList.add("keyboard__key--dark"); 
-    pressed.add(event.code);
-    if (pressed.has('ControlLeft')&& pressed.has('ShiftLeft'))    
-   {
-        if  (properties.lang==='en'){properties.lang='ru' 
-        createKeys(ruKeyLayout) ;   }
-        else {properties.lang='en' ;
-        createKeys(enKeyLayout);
-        }   
-     } else{
-    if( (event.code == 'ShiftRight')||(event.code == 'ShiftLeft')){
-       
-            pressedSift ()  
-        } else{
-          
-            getKeyChar(event)
-        }
-    };       
+    if (activeKey){
+        activeKey.classList.add("keyboard__key--dark"); 
+        pressed.add(event.code);
+        if (pressed.has('ControlLeft')&& pressed.has('ShiftLeft'))    
+       {
+            if  (properties.lang==='en'){properties.lang='ru' 
+            createKeys(ruKeyLayout) ;   }
+            else {properties.lang='en' ;
+            createKeys(enKeyLayout);
+            }   
+         } else{
+        if( (event.code == 'ShiftRight')||(event.code == 'ShiftLeft')){
+           
+                pressedSift ()  
+            } else{
+              
+                getKeyChar(event)
+            }
+        };       
+    };
+    
 });
 
 
 function getKeyChar(event){
    let activeKey=document.querySelector(`[data-id=${event.code}]`);
-   // activeKey.classList.remove('keyboard__key--dark');  
-    switch(event.code){
+      switch(event.code){
         case 'CapsLock':
             event.preventDefault();
             properties.capsLock= ! properties.capsLock;
@@ -93,11 +95,13 @@ function getKeyChar(event){
 
 document.addEventListener('keyup',function (event){
     let activeKey=document.querySelector(`[data-id=${event.code}]`);
-   activeKey.classList.remove('keyboard__key--dark'); 
-   pressed.delete(event.code); 
+    if (activeKey){
+        activeKey.classList.remove('keyboard__key--dark'); 
+         pressed.delete(event.code); 
      if( (event.code == 'ShiftRight')||(event.code == 'ShiftLeft')){
-        upSift ();
-}});
+        upSift ();}
+    }
+   });
 
 function setLocalStorage() {
     localStorage.setItem('lang', properties.lang);
