@@ -1,212 +1,144 @@
-let  properties= {
+import { EN_KEY_LAYOUT,  RU_KEY_LAYOUT, CODE_KEY, KEYS_DATA } from './constants';
+
+const properties = {
     capsLock: false,
     lang: "en"
 };
-let pressed = new Set();
-const  enKeyLayout = [
-    "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0","-","=", "Backspace",
-    "Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p","[","]","\\",
-     "Caps", "a", "s", "d", "f", "g", "h", "j", "k", "l",";","'", "Enter",
-     "Shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "?", "Shift","▲",
-     "Ctrl","Alt", "space","Alt","Ctr","◄","▼","►"
- ];
- const  ruKeyLayout = [
-    "ё", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0","-","=", "Backspace",
-    "Tab", "й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з","х","ъ","\\",
-     "Caps", "ф", "ы", "в", "а", "п", "р", "о", "л", "д","ж","э", "Enter",
-     "Shift", "я", "ч", "с", "м", "и", "т", "ь", "б", "ю", ".", "Shift","▲",
-     "Ctrl","Alt", "space","Alt","Ctr","◄","▼","►"
- ];
+const pressed = new Set();
+
 function createKeys(keyLayout) {
-    const  keysContainer=document.querySelector('.keyboard__keys');
-    keysContainer.innerHTML=''
-    const fragment = document.createDocumentFragment();
-    const codeKey=['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace',
-     'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash',
-      'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter',
-       'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ShiftRight',  'ArrowUp', 
-       'ControlLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight'];
-    keyLayout.forEach((key,i) => {
-        const keyElement = document.createElement("button");
-        keyElement.dataset.id=codeKey[i];
-        const insertLineBreak = ['Backspace','Backslash','Enter','ArrowUp'].indexOf(codeKey[i]) !== -1;
-        // Add attributes/classes
-        keyElement.setAttribute("type", "button");
-        keyElement.classList.add("keyboard__key");
-
-        switch(key){
-            case "Backspace" :
-                keyElement.classList.add("keyboard__key--big");
-                keyElement.innerText=key;
-                break;
-            case "Caps":
-                    keyElement.classList.add("keyboard__key--big");
-                    keyElement.classList.add("keyboard__key--activebutonn");
-                    keyElement.innerText=key;
-                    if (properties.capsLock){
-                        keyElement.classList.add("keyboard__key--active");
-                    }
-                    break;
-            case "Enter":
-                keyElement.classList.add("keyboard__key--big");
-                keyElement.innerText=key;
-                break;
-            case "space":
-                keyElement.classList.add("keyboard__key--space");
-                 break;
-            case "Shift":
-                keyElement.innerText=key;                                 
-                break;
-            case "Shift":
-                keyElement.classList.add("keyboard__key--big");
-                 keyElement.innerText=key;                                      
-                break;
-            case "Alt":
-                keyElement.innerText=key;
-                 break;
-            case "Сtrl":
-                 keyElement.innerText=key;
-                  break;
-            default:
-                if (properties.capsLock){
-                    keyElement.innerText=key.toUpperCase();;
-                } else{
-                    keyElement.innerText=key;
-                }
-                
-                break;
-            };
+  const  keysContainer=document.querySelector('.keyboard__keys');
+  keysContainer.innerHTML=''
+  const fragment = document.createDocumentFragment();    
+  keyLayout.forEach((key,i) => {
+    const keyElement = document.createElement("button");
+    keyElement.dataset.id = CODE_KEY[i];
+    const insertLineBreak = ['Backspace','Backslash','Enter','ShiftRight'].indexOf(CODE_KEY[i]) !== -1;        
+    // keyElement.setAttribute("type", "button");
+    keyElement.classList.add("keyboard__key");
+    switch(key){
+      case "Backspace" :
+       keyElement.classList.add("keyboard__key--big");
+       keyElement.innerText=key;
+       break;
+      case "Caps":
+       keyElement.classList.add("keyboard__key--big");
+       keyElement.classList.add("keyboard__key--activebutonn");
+       keyElement.innerText=key;
+       if (properties.capsLock) keyElement.classList.add("keyboard__key--active");
+       break;
+      case "Enter":
+        keyElement.classList.add("keyboard__key--big");
+        keyElement.innerText=key;
+        break;
+      case "space":
+        keyElement.classList.add("keyboard__key--space");
+        break;
+      case "Shift":
+        keyElement.classList.add("keyboard__key--big");
+        keyElement.innerText=key;                                      
+        break;
+      case "Alt":
+      case "Сtrl":
+        keyElement.innerText=key;
+        break;
+      
+      default:
+        if (properties.capsLock) {
+          keyElement.innerText=key.toUpperCase();
+        } else {
+          keyElement.innerText=key;
+        }                
+        break;
+    };
     fragment.appendChild(keyElement);
-    if (insertLineBreak) {
-         fragment.append(document.createElement("br"));
-            }
-        });       
-keysContainer.append( fragment);
-    };
-  
+    if (insertLineBreak)fragment.append(document.createElement("br"));        
+       
+  });       
+  keysContainer.append( fragment);
+};
 
-    function getChar(event){   
-        const inputText=document.querySelector('.textarea'); 
-        
-        let btn=event.target;
-        pressed.add(btn.dataset.id);    
-        if  (btn.textContent.length==0) { 
-            inputText.value +=' ';        
-            return
-        } ;
-        if  (btn.textContent.length==1) { 
-          inputText.value +=btn.textContent;      
-            return
-        } ;
-        if (btn.textContent=="Enter"){
-            inputText.value +="\n";        
-            return;
-        };
-        if (btn.textContent=="Tab"){
-            inputText.value +="  ";
-             return;
-        };
-        if (btn.textContent=="Backspace"){
-            inputText.value = inputText.value.slice(0, (inputText.value.length - 1));
-            return;
-        };
-        
-        if (btn.textContent=='Caps'){
-            let keys=document.querySelectorAll('.keyboard__key');
-            properties.capsLock= ! properties.capsLock;
-            btn.classList.toggle("keyboard__key--active");
-            for (let i=0; i< keys.length;i++) {
-                if (keys[i].innerText.length === 1) {
-                    if (properties.capsLock) {
-                        keys[i].textContent=keys[i].textContent.toUpperCase();
-                    } else 
-                    {keys[i].textContent=keys[i].textContent.toLowerCase();};
-                };               
-            }
-            return;  
-        }; 
-        if (pressed.has('ControlLeft')&& pressed.has('ShiftLeft'))    
-        {
-             if  (properties.lang==='en'){properties.lang='ru' 
-             createKeys(ruKeyLayout) ;   }
-             else {properties.lang='en' ;
-             createKeys(enKeyLayout);
-             }   
-          } else{
-         if (pressed.has('ShiftRight')|| pressed.has('ShiftLeft')){            
-            pressedSift ()  
-        }
-        };
-    };
-    function pressedSift (){
-        const replacementEn=["~","!","@","#","$","%","^","&","*","(",")","_","+"];
-        const replacementRu=["Ё","!","\"","№",";","%",":","?","*","(",")","_","+"];
-        let keys=document.querySelectorAll('.keyboard__key');
-        for (let i=0; i<13;i++){
-            if (properties.lang=="en") {keys[i].textContent=replacementEn[i]; };
-            if (properties.lang=="ru") {keys[i].textContent=replacementRu[i]; } ;       
-        }
-        for (let i=13; i< keys.length;i++) {
-            if (properties.lang=="en"){
-                switch(i){
-                    case 25 :
-                        keys[i].textContent="{";
-                        break;
-                    case 26 :
-                        keys[i].textContent="}";
-                        break;
-                    case 27 :
-                        keys[i].textContent="|";
-                        break;
-                    case 38 :
-                        keys[i].textContent=":";
-                        break;
-                    case 39 :
-                        keys[i].textContent='"';
-                        break;
-                    case 49 :
-                        keys[i].textContent="<";
-                        break;
-                    case 50 :
-                        keys[i].textContent=">";
-                        break;
-                    case 51 :
-                        keys[i].textContent="?";
-                        break;
-                    default:   
-                        if (keys[i].innerText.length === 1) {
-                            if (properties.capsLock) { 
-                                keys[i].textContent=keys[i].textContent.toLowerCase();                             
-                                } else {
-                                keys[i].textContent=keys[i].textContent.toUpperCase();
-                                };                                       
-                                         
-                           };
-                        
-                        break;               
-                    };
+function pressedCaps(btn) {
+  const keys = document.querySelectorAll('.keyboard__key');
+  properties.capsLock = ! properties.capsLock;
+  btn.classList.toggle("keyboard__key--active");
+  keys.forEach((key)=>{
+    if (key.innerText.length === 1) {
+      if (properties.capsLock) {
+        key.textContent=key.textContent.toUpperCase();
+            } else {
+              key.textContent=key.textContent.toLowerCase();
             };
-            if (properties.lang=="ru"){
-                switch(i){
-                    case 27 :
-                        keys[i].textContent="/";
-                        break;
-                    case 51 :
-                        keys[i].textContent=",";
-                        break;
-                    default:   
-                        if (keys[i].innerText.length === 1) {                                        
-                            if (properties.capsLock) { 
-                                keys[i].textContent=keys[i].textContent.toLowerCase();                             
-                                } else {
-                                keys[i].textContent=keys[i].textContent.toUpperCase();
-                                };                                                 
-                               };                   
-                            
-                        break;               
-                    };
-            };        
-            };
-      };
+            };               
+        });
+    }
 
-export {createKeys,getChar,properties,pressed,enKeyLayout, ruKeyLayout,pressedSift}
+function changeLang() {
+  if (properties.lang === 'en') {
+    properties.lang='ru' 
+    createKeys(RU_KEY_LAYOUT);
+    } else {
+    properties.lang='en' ;
+    createKeys(EN_KEY_LAYOUT);  
+    }   
+}
+
+function pressedShift() {
+    const keys=document.querySelectorAll('.keyboard__key');
+    keys.forEach((key)=>{
+      if (key.dataset.id in  KEYS_DATA ) {
+        key.textContent = (properties.lang==="en") ? KEYS_DATA[key.dataset.id].enShift : KEYS_DATA[key.dataset.id].ruShift;
+      } else {
+          if (key.innerText.length === 1) {
+            key.textContent = (properties.capsLock) ? key.textContent.toLowerCase() : key.textContent.toUpperCase();
+          };         
+      }
+})
+};
+
+
+function getChar(btn) {
+    
+  const inputText=document.querySelector('.textarea'); 
+  // const btn = event.target;
+  pressed.add(btn.dataset.id);    
+  if (btn.dataset.id === 'Space') { 
+    inputText.value +=' ';        
+    return
+    };
+  if (btn.dataset.id === "Enter"){
+    inputText.value +="\n";        
+    return;
+    };
+  if (btn.dataset.id === "Tab"){
+    inputText.value +="  ";
+    return;
+    };
+  if (btn.dataset.id === "Backspace"){
+    inputText.value = inputText.value.slice(0, (inputText.value.length - 1));
+    return;
+    };
+  if (btn.textContent.length === 1) { 
+    inputText.value += btn.textContent;      
+    return;
+    };      
+  if (btn.dataset.id === 'CapsLock') {
+    pressedCaps(btn);
+    return;  
+    }; 
+  if (pressed.has('ControlLeft') && pressed.has('ShiftLeft')){
+    changeLang()              
+  } else {
+    if (pressed.has('ShiftRight') || pressed.has('ShiftLeft'))  pressedShift();      
+  };
+}
+
+function upShift() {
+  if (properties.lang ==='en'){        
+      createKeys(EN_KEY_LAYOUT)
+   } else if (properties.lang ==='ru'){       
+      createKeys(RU_KEY_LAYOUT)
+   }
+  };
+
+export {createKeys, getChar, properties, pressed, pressedShift, upShift, changeLang}
