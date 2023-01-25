@@ -1,4 +1,4 @@
-# KeyboardRS
+# Virtual Keyboard
 
 Deploy: https://alexolga.github.io/KeyboardRS/
 
